@@ -9,6 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Parameters;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -20,6 +24,7 @@ public class BaseTest {
     public static WebDriverWait wait = null;
     public static FluentWait fluentWait = null;
 
+
     @BeforeSuite
     static void setupClass() {
         WebDriverManager.chromedriver().setup();
@@ -29,10 +34,9 @@ public class BaseTest {
     @Parameters({"BaseURL"})
     public static void launchBrowser(String BaseURL) {
         LoginTests.driver = new ChromeDriver();
-//        LoginTests.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        LoginTests.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         url = BaseURL;
         driver.get(url);
-        wait = new WebDriverWait(LoginTests.driver, Duration.ofSeconds(20));
     }
 
     @AfterMethod
@@ -40,12 +44,14 @@ public class BaseTest {
         LoginTests.driver.quit();
     }
 
-//    protected static void navigateToPage() {
-//        String url = "https://bbb.testpro.io/";
-//        driver.get(url);
-//    }
 
-    public static void login(String email, String password) {
+
+    protected static void navigateToPage() {
+        String url = "https://bbb.testpro.io/";
+        driver.get(url);
+    }
+
+    public void login(String email, String password) {
         provideEmail(email);
         providePassword(password);
         clickSubmit();
@@ -94,7 +100,11 @@ public class BaseTest {
     public static void clickAvatarIcon() {
         WebElement avatarIcon = driver.findElement(By.cssSelector("img.avatar"));
         avatarIcon.click();
+    }
 
+    public static void allSongsPage(){
+        WebElement allSongsPageNavigate = driver.findElement(By.cssSelector("[href='#!/songs']"));
+        allSongsPageNavigate.click();
     }
 
     @DataProvider(name="incorrectLoginProviders")
